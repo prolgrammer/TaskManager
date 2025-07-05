@@ -1,0 +1,9 @@
+app:
+  name: "task_manager"
+  version: "0.0.1"
+  log_level: "debug"
+http:
+  host: "localhost"
+  port: "8080"
+services:
+  task_workers: 100
