@@ -196,9 +196,13 @@ const docTemplate = `{
     "definitions": {
         "requests.CreateTask": {
             "type": "object",
+            "required": [
+                "text"
+            ],
             "properties": {
                 "text": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "task 1"
                 }
             }
         },

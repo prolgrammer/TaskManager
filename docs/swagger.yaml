@@ -3,7 +3,10 @@ definitions:
   requests.CreateTask:
     properties:
       text:
+        example: task 1
         type: string
+    required:
+    - text
     type: object
   responses.Task:
     properties:

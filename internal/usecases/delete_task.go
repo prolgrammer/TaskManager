@@ -8,7 +8,7 @@ import (
 )
 
 type deleteTaskUseCase struct {
-	taskRepo    repositories.TaskRepository
+	taskRepo    DeleteTaskRepository
 	taskManager task_manager.TaskManager
 }
 
@@ -17,7 +17,7 @@ type DeleteTaskUseCase interface {
 }
 
 func NewDeleteTaskUseCase(
-	taskRepo repositories.TaskRepository,
+	taskRepo DeleteTaskRepository,
 	taskManager task_manager.TaskManager,
 ) DeleteTaskUseCase {
 	return &deleteTaskUseCase{
@@ -36,9 +36,9 @@ func (d *deleteTaskUseCase) DeleteTask(c context.Context, taskId string) error {
 	}
 
 	if task.FinishedAt != nil {
-		return d.taskRepo.Delete(c, taskId)
+		return d.taskRepo.DeleteTask(c, taskId)
 	}
 	d.taskManager.CancelTask(taskId)
 
-	return d.taskRepo.Delete(c, taskId)
+	return d.taskRepo.DeleteTask(c, taskId)
 }

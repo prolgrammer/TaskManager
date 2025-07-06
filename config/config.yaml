@@ -1,9 +1,9 @@
 app:
-  name: "task_manager"
-  version: "0.0.1"
-  log_level: "debug"
+  name: "${APP_NAME}"
+  version: "${APP_VERSION}"
+  log_level: "${LOG_LEVEL}"
 http:
-  host: "localhost"
-  port: "8080"
+  host: "${HTTP_HOST}"
+  port: "${HTTP_PORT}"
 services:
-  task_workers: 100
+  task_workers: "${TASK_WORKERS}"

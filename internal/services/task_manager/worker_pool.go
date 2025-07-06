@@ -62,7 +62,7 @@ func (wp *workerPool) processTask(task *entities.Task) {
 		return
 	}
 
-	duration := time.Duration(30+rand.Intn(20)) * time.Second
+	duration := time.Duration(3+rand.Intn(2)) * time.Minute
 	wp.tm.logger.Debug().Msgf("Processing task %s, duration: %v", task.ID, duration)
 
 	select {

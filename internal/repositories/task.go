@@ -17,7 +17,7 @@ type TaskRepository interface {
 	SelectByID(ctx context.Context, id string) (entities.Task, error)
 	SelectAll(ctx context.Context, limit, offset int) ([]entities.Task, error)
 	Count(ctx context.Context) (int, error)
-	Delete(ctx context.Context, id string) error
+	DeleteTask(ctx context.Context, id string) error
 }
 
 func NewTaskRepository() TaskRepository {
@@ -85,7 +85,7 @@ func (t *taskRepo) Count(ctx context.Context) (int, error) {
 	return len(t.tasks), nil
 }
 
-func (t *taskRepo) Delete(ctx context.Context, id string) error {
+func (t *taskRepo) DeleteTask(ctx context.Context, id string) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if _, exists := t.tasks[id]; !exists {

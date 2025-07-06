@@ -53,5 +53,6 @@ func (c *createTaskUseCase) CreateTask(context context.Context, req requests.Cre
 		TaskID:    task.ID,
 		Status:    string(task.Status),
 		CreatedAt: task.CreatedAt.Format("2006-01-02 15:04:05"),
+		Duration:  task.Duration.String(),
 	}, nil
 }

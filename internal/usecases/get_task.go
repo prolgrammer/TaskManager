@@ -8,7 +8,7 @@ import (
 )
 
 type getTaskUseCase struct {
-	taskRepo repositories.TaskRepository
+	taskRepo GetTaskRepository
 }
 
 type GetTaskUseCase interface {
