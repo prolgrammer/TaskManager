@@ -30,15 +30,10 @@ func (g *getTaskUseCase) GetTask(context context.Context, id string) (responses.
 		return responses.Task{}, err
 	}
 
-	var duration string
-	if task.StartedAt != nil && task.FinishedAt != nil {
-		duration = task.FinishedAt.Sub(*task.StartedAt).String()
-	}
-
 	return responses.Task{
 		TaskID:    task.ID,
 		Status:    string(task.Status),
 		CreatedAt: task.CreatedAt.Format("2006-01-02 15:04:05"),
-		Duration:  duration,
+		Duration:  task.Duration.String(),
 	}, nil
 }

@@ -5,7 +5,7 @@ import (
 	http2 "TaskManager/internal/controllers/http"
 	"TaskManager/internal/controllers/http/middleware"
 	"TaskManager/internal/repositories"
-	"TaskManager/internal/services"
+	"TaskManager/internal/services/task_manager"
 	"TaskManager/internal/usecases"
 	"TaskManager/pkg/logger"
 	"fmt"
@@ -17,7 +17,7 @@ import (
 var (
 	l logger.Logger
 
-	taskManager services.TaskManager
+	taskManager task_manager.TaskManager
 
 	createTaskUseCase usecases.CreateTaskUseCase
 	getTaskUseCase    usecases.GetTaskUseCase
@@ -54,7 +54,7 @@ func initPackages(cfg *config.Config) error {
 }
 
 func initServices(cfg *config.Config) {
-	taskManager = services.NewTaskManager(taskRepo, l, cfg.Services.Workers)
+	taskManager = task_manager.NewTaskManager(taskRepo, l, cfg.Services.Workers)
 }
 
 func initRepository(cfg *config.Config) {
@@ -64,7 +64,7 @@ func initRepository(cfg *config.Config) {
 func initUseCases() {
 	createTaskUseCase = usecases.NewCreateTaskUseCase(taskRepo, taskManager)
 	getTaskUseCase = usecases.NewGetTaskUseCase(taskRepo)
-	deleteTaskUseCase = usecases.NewDeleteTaskUseCase(taskRepo)
+	deleteTaskUseCase = usecases.NewDeleteTaskUseCase(taskRepo, taskManager)
 	getTasksUseCase = usecases.NewGetTasksUseCase(taskRepo)
 }
 

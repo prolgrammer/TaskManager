@@ -28,16 +28,12 @@ func (g getTasksUseCase) GetTasks(c context.Context, limit, offset int) ([]respo
 
 	taskResponses := make([]responses.Task, 0, len(tasks))
 	for _, task := range tasks {
-		var duration string
-		if task.StartedAt != nil && task.FinishedAt != nil {
-			duration = task.FinishedAt.Sub(*task.StartedAt).String()
-		}
 
 		taskResponses = append(taskResponses, responses.Task{
 			TaskID:    task.ID,
 			Status:    string(task.Status),
 			CreatedAt: task.CreatedAt.Format("2006-01-02 15:04:05"),
-			Duration:  duration,
+			Duration:  task.Duration.String(),
 		})
 	}
 

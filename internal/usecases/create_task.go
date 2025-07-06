@@ -5,7 +5,7 @@ import (
 	"TaskManager/internal/controllers/responses"
 	"TaskManager/internal/entities"
 	"TaskManager/internal/repositories"
-	"TaskManager/internal/services"
+	"TaskManager/internal/services/task_manager"
 	"context"
 	"errors"
 	"fmt"
@@ -15,14 +15,14 @@ import (
 
 type createTaskUseCase struct {
 	taskRepo    CreateTaskRepository
-	taskManager services.TaskManager
+	taskManager task_manager.TaskManager
 }
 
 type CreateTaskUseCase interface {
 	CreateTask(context context.Context, req requests.CreateTask) (responses.Task, error)
 }
 
-func NewCreateTaskUseCase(taskRepo CreateTaskRepository, taskManager services.TaskManager) CreateTaskUseCase {
+func NewCreateTaskUseCase(taskRepo CreateTaskRepository, taskManager task_manager.TaskManager) CreateTaskUseCase {
 	return &createTaskUseCase{
 		taskRepo:    taskRepo,
 		taskManager: taskManager,

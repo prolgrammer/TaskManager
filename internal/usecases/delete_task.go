@@ -2,12 +2,14 @@ package usecases
 
 import (
 	"TaskManager/internal/repositories"
+	"TaskManager/internal/services/task_manager"
 	"context"
 	"errors"
 )
 
 type deleteTaskUseCase struct {
-	taskRepo repositories.TaskRepository
+	taskRepo    repositories.TaskRepository
+	taskManager task_manager.TaskManager
 }
 
 type DeleteTaskUseCase interface {
@@ -16,9 +18,11 @@ type DeleteTaskUseCase interface {
 
 func NewDeleteTaskUseCase(
 	taskRepo repositories.TaskRepository,
+	taskManager task_manager.TaskManager,
 ) DeleteTaskUseCase {
 	return &deleteTaskUseCase{
-		taskRepo: taskRepo,
+		taskRepo:    taskRepo,
+		taskManager: taskManager,
 	}
 }
 
@@ -31,10 +35,10 @@ func (d *deleteTaskUseCase) DeleteTask(c context.Context, taskId string) error {
 		return err
 	}
 
-	task.Ctx.Done()
-	//if err = d.taskRepo.Delete(c, taskId); err != nil {
-	//	return err
-	//}
+	if task.FinishedAt != nil {
+		return d.taskRepo.Delete(c, taskId)
+	}
+	d.taskManager.CancelTask(taskId)
 
-	return nil
+	return d.taskRepo.Delete(c, taskId)
 }
