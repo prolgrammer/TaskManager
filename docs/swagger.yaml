@@ -52,10 +52,40 @@ paths:
             type: string
       summary: Создание новой задачи
   /task/{task_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление задачи по ее id
+      parameters:
+      - description: path format
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: некорректный формат запроса
+          schema:
+            type: string
+        "404":
+          description: задача не найдена
+          schema:
+            type: string
+        "500":
+          description: внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удаление задачи
     get:
+      consumes:
+      - application/json
       description: запрос на получение задачи с помощью ее ID
       parameters:
-      - description: id задачи
+      - description: path format
         in: path
         name: task_id
         required: true
@@ -76,4 +106,38 @@ paths:
           schema:
             type: string
       summary: запрос на получение задачи
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список задач с поддержкой пагинации
+      parameters:
+      - default: 10
+        description: Количество задач на странице
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Смещение
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.Task'
+            type: array
+        "400":
+          description: некорректный формат запроса
+          schema:
+            type: string
+        "500":
+          description: внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получение списка задач
 swagger: "2.0"

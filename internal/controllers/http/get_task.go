@@ -31,12 +31,13 @@ func NewGetTaskController(
 // GetTask godoc
 // @Summary запрос на получение задачи
 // @Description запрос на получение задачи с помощью ее ID
-// @Produce json
-// @Param task_id path string true "id задачи"
-// @Success 200 {object} responses.Task
-// @Failure 404 {object} string "задача не найдена"
-// @Failure 500 {object} string "внутренняя ошибка сервера"
-// @Router /task/{task_id} [get]
+// @Accept       json
+// @Produce      json
+// @Param        task_id path string true "path format"
+// @Success      200 {object} responses.Task
+// @Failure      404 {object} string "задача не найдена"
+// @Failure      500 {object} string "внутренняя ошибка сервера"
+// @Router       /task/{task_id} [get]
 func (gt *getTaskController) GetTask(c *gin.Context) {
 	taskId := c.Param("task_id")
 	if taskId == "" {

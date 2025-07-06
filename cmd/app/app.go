@@ -21,6 +21,8 @@ var (
 
 	createTaskUseCase usecases.CreateTaskUseCase
 	getTaskUseCase    usecases.GetTaskUseCase
+	deleteTaskUseCase usecases.DeleteTaskUseCase
+	getTasksUseCase   usecases.GetTasksUseCase
 
 	taskRepo repositories.TaskRepository
 )
@@ -40,7 +42,6 @@ func Run() {
 	initServices(cfg)
 	initUseCases()
 
-	fmt.Println("Run")
 	runHTTP(cfg)
 }
 
@@ -63,6 +64,8 @@ func initRepository(cfg *config.Config) {
 func initUseCases() {
 	createTaskUseCase = usecases.NewCreateTaskUseCase(taskRepo, taskManager)
 	getTaskUseCase = usecases.NewGetTaskUseCase(taskRepo)
+	deleteTaskUseCase = usecases.NewDeleteTaskUseCase(taskRepo)
+	getTasksUseCase = usecases.NewGetTasksUseCase(taskRepo)
 }
 
 func runHTTP(cfg *config.Config) {
@@ -74,8 +77,9 @@ func runHTTP(cfg *config.Config) {
 	http2.InitMiddleware(router)
 	http2.NewCreateTaskController(router, createTaskUseCase, mw, l)
 	http2.NewGetTaskController(router, getTaskUseCase, mw, l)
+	http2.NewDeleteTaskController(router, deleteTaskUseCase, mw, l)
+	http2.NewGetTasksController(router, getTasksUseCase, mw, l)
 
-	fmt.Println("Run x2")
 	address := fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)
 	l.Info().Msgf("starting HTTP server on %s", address)
 	err := http.ListenAndServe(address, router)

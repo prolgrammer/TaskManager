@@ -114,6 +114,7 @@ func (tm *taskManager) processTask(task *entities.Task) {
 		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task completed successfully"
 	case <-task.Ctx.Done():
+		fmt.Println("ctx done")
 		task.Status = entities.StatusFailed
 		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task canceled"
