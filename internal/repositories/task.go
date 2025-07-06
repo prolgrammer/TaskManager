@@ -14,6 +14,7 @@ type taskRepo struct {
 type TaskRepository interface {
 	Insert(context context.Context, task *entities.Task) error
 	Update(context context.Context, task *entities.Task) error
+	SelectByID(ctx context.Context, id string) (*entities.Task, error)
 }
 
 func NewTaskRepository() TaskRepository {
@@ -41,4 +42,14 @@ func (t *taskRepo) Update(context context.Context, task *entities.Task) error {
 	}
 	t.tasks[task.ID] = task
 	return nil
+}
+
+func (t *taskRepo) SelectByID(ctx context.Context, id string) (*entities.Task, error) {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+	task, exists := t.tasks[id]
+	if !exists {
+		return nil, ErrEntityNotFound
+	}
+	return task, nil
 }

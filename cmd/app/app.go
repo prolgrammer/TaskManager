@@ -20,6 +20,7 @@ var (
 	taskManager services.TaskManager
 
 	createTaskUseCase usecases.CreateTaskUseCase
+	getTaskUseCase    usecases.GetTaskUseCase
 
 	taskRepo repositories.TaskRepository
 )
@@ -61,6 +62,7 @@ func initRepository(cfg *config.Config) {
 
 func initUseCases() {
 	createTaskUseCase = usecases.NewCreateTaskUseCase(taskRepo, taskManager)
+	getTaskUseCase = usecases.NewGetTaskUseCase(taskRepo)
 }
 
 func runHTTP(cfg *config.Config) {
@@ -71,6 +73,7 @@ func runHTTP(cfg *config.Config) {
 
 	http2.InitMiddleware(router)
 	http2.NewCreateTaskController(router, createTaskUseCase, mw, l)
+	http2.NewGetTaskController(router, getTaskUseCase, mw, l)
 
 	fmt.Println("Run x2")
 	address := fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)

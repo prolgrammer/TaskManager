@@ -91,7 +91,7 @@ func (tm *taskManager) processTask(task *entities.Task) {
 	select {
 	case <-task.Ctx.Done():
 		task.Status = entities.StatusFailed
-		task.FinishedAt = time.Now()
+		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task canceled"
 		_ = tm.taskRepo.Update(context.Background(), task)
 		return
@@ -99,7 +99,7 @@ func (tm *taskManager) processTask(task *entities.Task) {
 	}
 
 	task.Status = entities.StatusRunning
-	task.StartedAt = time.Now()
+	task.StartedAt = timePtr(time.Now())
 	if err := tm.taskRepo.Update(context.Background(), task); err != nil {
 		tm.logger.Error().Msgf("failed to update task: %v", err)
 		return
@@ -111,21 +111,25 @@ func (tm *taskManager) processTask(task *entities.Task) {
 	select {
 	case <-time.After(duration):
 		task.Status = entities.StatusCompleted
-		task.FinishedAt = time.Now()
+		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task completed successfully"
 	case <-task.Ctx.Done():
 		task.Status = entities.StatusFailed
-		task.FinishedAt = time.Now()
+		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task canceled"
 	case <-tm.stop:
 		task.Status = entities.StatusFailed
-		task.FinishedAt = time.Now()
+		task.FinishedAt = timePtr(time.Now())
 		task.Result = "Task canceled"
 	}
 
 	if err := tm.taskRepo.Update(context.Background(), task); err != nil {
 		tm.logger.Error().Msgf("failed to update task: %v", err)
 	}
+}
+
+func timePtr(t time.Time) *time.Time {
+	return &t
 }
 
 func (tm *taskManager) movePendingTasks() {

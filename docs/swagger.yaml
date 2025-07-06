@@ -1,0 +1,79 @@
+basePath: /
+definitions:
+  requests.CreateTask:
+    properties:
+      text:
+        type: string
+    type: object
+  responses.Task:
+    properties:
+      created_at:
+        type: string
+      duration:
+        type: string
+      status:
+        type: string
+      task_id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Service for processing tasks
+  title: Task service
+  version: 0.0.1
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Создание задачи с помощь передачи текста задания
+      parameters:
+      - description: структура запроса
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Task'
+        "400":
+          description: некорректный формат запроса
+          schema:
+            type: string
+        "500":
+          description: внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создание новой задачи
+  /task/{task_id}:
+    get:
+      description: запрос на получение задачи с помощью ее ID
+      parameters:
+      - description: id задачи
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Task'
+        "404":
+          description: задача не найдена
+          schema:
+            type: string
+        "500":
+          description: внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: запрос на получение задачи
+swagger: "2.0"

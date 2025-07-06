@@ -19,8 +19,8 @@ type Task struct {
 	Text       string
 	Status     TaskStatus
 	CreatedAt  time.Time
-	StartedAt  time.Time
-	FinishedAt time.Time
+	StartedAt  *time.Time
+	FinishedAt *time.Time
 	Result     string
 	Error      string
 	Ctx        context.Context //TODO При удалении ставить в Done

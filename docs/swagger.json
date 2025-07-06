@@ -1,0 +1,121 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Service for processing tasks",
+        "title": "Task service",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/task": {
+            "post": {
+                "description": "Создание задачи с помощь передачи текста задания",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Создание новой задачи",
+                "parameters": [
+                    {
+                        "description": "структура запроса",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Task"
+                        }
+                    },
+                    "400": {
+                        "description": "некорректный формат запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{task_id}": {
+            "get": {
+                "description": "запрос на получение задачи с помощью ее ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "запрос на получение задачи",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id задачи",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Task"
+                        }
+                    },
+                    "404": {
+                        "description": "задача не найдена",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "requests.CreateTask": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.Task": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "task_id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

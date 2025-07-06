@@ -29,7 +29,7 @@ func NewCreateTaskUseCase(taskRepo CreateTaskRepository, taskManager services.Ta
 	}
 }
 
-func (c createTaskUseCase) CreateTask(context context.Context, req requests.CreateTask) (responses.Task, error) {
+func (c *createTaskUseCase) CreateTask(context context.Context, req requests.CreateTask) (responses.Task, error) {
 	task := &entities.Task{
 		ID:        uuid.New().String(),
 		Text:      req.Text,
