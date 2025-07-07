@@ -15,7 +15,7 @@ type GetTaskUseCase interface {
 	GetTask(context context.Context, id string) (responses.Task, error)
 }
 
-func NewGetTaskUseCase(taskRepo repositories.TaskRepository) GetTaskUseCase {
+func NewGetTaskUseCase(taskRepo GetTaskRepository) GetTaskUseCase {
 	return &getTaskUseCase{
 		taskRepo: taskRepo,
 	}

@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"TaskManager/internal/controllers/responses"
-	"TaskManager/internal/repositories"
 	"context"
 )
 
@@ -14,7 +13,7 @@ type GetTasksUseCase interface {
 	GetTasks(c context.Context, limit, offset int) ([]responses.Task, error)
 }
 
-func NewGetTasksUseCase(taskRepo repositories.TaskRepository) GetTasksUseCase {
+func NewGetTasksUseCase(taskRepo GetTasksRepository) GetTasksUseCase {
 	return &getTasksUseCase{
 		taskRepo: taskRepo,
 	}
