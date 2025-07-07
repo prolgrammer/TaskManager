@@ -10,7 +10,9 @@
 
 - [Gin](https://github.com/gin-gonic/gin) — HTTP-роутер
 - [UUID](https://github.com/google/uuid) — генерация уникальных идентификаторов
-- [Zerolog](https://github.com/rs/zerolog) — используемый логгер 
+- [Zerolog](https://github.com/rs/zerolog) — используемый логгер
+- [Testify](https://github.com/stretchr/testify) — фреймворк для тестирования и моков
+- [Mockery](https://github.com/golang/mock) — генератор моков (для тестов)
 
 ---
 
@@ -132,7 +134,7 @@ task-service/
     "text": "text"
   }
   ```
-- **Ответ** (200 Created):
+- **Ответ** (200 OK):
   ```json
   {
     "task_id": "uuid",
@@ -141,9 +143,16 @@ task-service/
     "duration": "0s"
   }
   ```
+- **Ошибки**:
+    - `400 Bad Request`: Некорректный формат запроса.
+    - `500 Internal Server Error`: Внутренняя ошибка сервера.
+- **Пример**:
+  ```bash
+  curl -X POST http://localhost:8080/task -H "Content-Type: application/json" -d '{"text":"process_data"}'
+  ```
 
-### Получение статуса задачи
-- **Метод**: `GET /tasks/{task_id}`
+### Получение задачи
+- **Метод**: `GET /task/{task_id}`
 - **Ответ** (200 OK):
   ```json
   {
@@ -153,13 +162,20 @@ task-service/
     "duration": "3m45s"
   }
   ```
+- **Ошибки**:
+    - `404 Not Found`: Задача с указанным `task_id` не найдена.
+    - `500 Internal Server Error`: Внутренняя ошибка сервера.
+- **Пример**:
+  ```bash
+  curl http://localhost:8080/task/<task_id>
+  ```
 
 ### Получение списка задач
-- Метод: `GET /tasks`
-- Параметры запроса:
-    - limit (int): Количество задач на странице (по умолчанию: 10).
-    - offset (int): Смещение от начала для пагинации (по умолчанию: 0).
-- Ответ (200 OK):
+- **Метод**: `GET /tasks`
+- **Параметры запроса**:
+    - `limit` (int): Количество задач на странице (по умолчанию: 10).
+    - `offset` (int): Смещение для пагинации (по умолчанию: 0).
+- **Ответ** (200 OK):
   ```json
   [
     {
@@ -169,6 +185,14 @@ task-service/
       "duration": "3m45s"
     },
   ]
+  ```
+- **Ошибки**:
+    - `400 Bad Request`: Некорректный формат запроса.
+    - `500 Internal Server Error`: Внутренняя ошибка сервера.
+- **Пример**:
+  ```bash
+  curl http://localhost:8080/tasks?limit=10&offset=0
+  ```
 
 ### Удаление задачи
 - **Метод**: `DELETE /task/{task_id}`
@@ -178,17 +202,13 @@ task-service/
     "message": "Delete successful"
   }
   ```
-
-### Примеры использования
-```bash
-# Создание задачи
-curl -X POST http://localhost:8080/task -H "Content-Type: application/json" -d "{\"text\":\"Моя первая задача\"}"
-
-# Получение задачи
-curl http://localhost:8080/task/<task_id>
-
-# Удаление задачи
-curl -X DELETE http://localhost:8080/task/<task_id>
-```
+- **Ошибки**:
+    - `400 Bad Request`: Некорректный формат запроса.
+    - `404 Not Found`: Задача с указанным `task_id` не найдена.
+    - `500 Internal Server Error`: Внутренняя ошибка сервера.
+- **Пример**:
+  ```bash
+  curl -X DELETE http://localhost:8080/task/<task_id>
+  ```
 
 
